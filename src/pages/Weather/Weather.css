@@ -1,0 +1,38 @@
+#main-weather {
+  flex: 6 0 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--border-radius);
+  transition: background-color 0.3s ease;
+  container-type: inline-size;
+}
+
+
+#main-weather.clear {
+  background-color: #88b6fc; 
+  color: #ffffff; 
+}
+
+
+#main-weather.cloudy {
+  background-color: var(--color-cloudy-day); /* Gris */
+  color: #333333;
+  
+}
+
+#main-weather .main-weather .temp {
+  font-size: var(--font-size-xxl);
+}
+
+#main-weather .main-weather .description {
+  font-size: var(--font-size-m);
+}
+
+.additional-info > ul {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px;
+}
