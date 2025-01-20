@@ -48,14 +48,17 @@
 }
 
 body {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  font-size: var(--font-size-m);
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  
+  height: 100svh;
+  width: 100vw;
+  overflow: hidden;
+  @media screen and (max-width: 750px) {
+    min-height: 100svh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: auto;
+  }
 }
+
 
 p {
   margin-bottom: var(--spacing-m);
