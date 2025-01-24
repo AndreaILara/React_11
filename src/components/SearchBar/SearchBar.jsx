@@ -9,16 +9,18 @@ const SearchBar = ({ getWeather }) => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setUserInput(e.target.value);
+    setError(false); // Resetear error al escribir
   };
-  const getCoords = async cityName => {
+
+  const getCoords = async (cityName) => {
     try {
       const cityLocation = await apiRequest({
         geolocation: true,
         cityName,
       });
-      if (cityLocation.length > 0) {
+      if (cityLocation && cityLocation.length > 0) {
         const coords = {
           lat: cityLocation[0].lat,
           lon: cityLocation[0].lon,
@@ -27,27 +29,39 @@ const SearchBar = ({ getWeather }) => {
         return coords;
       } else {
         setError(true);
+        return null;
       }
     } catch (error) {
       console.error(error);
+      setError(true);
     }
   };
 
-  const handleSubmit = async (e, cityName) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const coords = await getCoords(cityName);
+
+    if (!userInput.trim()) {
+      setError(true);
+      return;
+    }
+
+    const coords = await getCoords(userInput.trim());
     if (coords) {
       const weatherReport = await getWeather(coords);
+
+      // Limpiar la lista de ubicaciones previas (opcional)
+      localStorage.setItem('savedLocations', JSON.stringify([weatherReport]));
+
       navigate(`/weather/${weatherReport.id}`);
     }
   };
 
   return (
-    <>
+    <div className="search-container">
       <form
         id="search-form"
         role="search"
-        onSubmit={e => handleSubmit(e, userInput)}
+        onSubmit={handleSubmit}
       >
         <input
           id="q"
@@ -56,15 +70,14 @@ const SearchBar = ({ getWeather }) => {
           type="search"
           name="q"
           value={userInput}
-          onChange={e => handleChange(e)}
+          onChange={handleChange}
         />
-
         <button type="submit">
           <img src={searchIcon} alt="Lupa" />
         </button>
       </form>
-      {error && <p>Ciudad no encontrada</p>}
-    </>
+      {error && <p className="error-message">Por favor, introduce una ciudad válida.</p>}
+    </div>
   );
 };
 

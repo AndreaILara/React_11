@@ -14,27 +14,30 @@ aside ul {
 }
 
 aside nav ul {
-  overflow-x: hidden;
-  overflow-y: scroll;
-  max-height: 70svh;
+  max-height: 450px; /* Reducir la altura máxima */
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding-right: 10px; /* Añadir espacio para el scroll */
 }
 
-/* Scrollbar styles */
 aside nav ul::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-aside nav ul::-webkit-scrollbar-track {
-  background: #0001;
+  width: 6px;
 }
 
 aside nav ul::-webkit-scrollbar-thumb {
-  background: #999;
+  background-color: var(--color-dark);
+  border-radius: 4px;
 }
 
 aside nav ul::-webkit-scrollbar-thumb:hover {
   background: #888;
+}
+
+.no-locations {
+  font-style: italic;
+  color: gray;
+  text-align: center;
+  margin-top: var(--spacing-m);
 }
 
 @media screen and (max-width: 750px) {

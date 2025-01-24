@@ -19,9 +19,7 @@ const Aside = ({ getWeather, listOfLocations }) => {
             ))
           ) : (
             <p className="no-locations">
-              No hay ubicaciones guardadas. Activa la geolocalización para
-              obtener datos de tu ubicación actual o utiliza el buscador para
-              encontrar información del clima en cualquier ciudad.
+              No hay ubicaciones guardadas. Activa la geolocalización o realiza una búsqueda.
             </p>
           )}
         </ul>
