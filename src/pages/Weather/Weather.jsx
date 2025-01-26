@@ -5,42 +5,46 @@ import './Weather.css';
 const Weather = ({ list }) => {
   const params = useParams();
 
-  if (!list || list.length === 0) {
-    return <p>No hay datos disponibles.</p>;
-  }
-
-  const localWeather = list.find((location) => location.local);
+  // Encuentra el clima local o usa el primer elemento como predeterminado
+  const localWeather = list.find(location => location.local);
   const defaultWeatherId = localWeather ? localWeather.id : list[0].id;
   const locationId = params.id || defaultWeatherId;
-  const weather = list.find((location) => location.id == locationId);
+  const weather = list.find(location => location.id == locationId); // Uso == porque params.id es string
 
-  if (!weather || !weather.clouds) {
-    return <p>Datos incompletos para esta ubicación.</p>;
-  }
-
-  // Determina el fondo dinámico según las nubes
-  const weatherClass = weather.clouds.all > 50 ? 'cloudy' : 'clear';
+  // Determinar el color de fondo dinámicamente
+  const backgroundColor =
+    weather?.clouds.all > 50 ? 'var(--color-cloudy-day)' : 'var(--color-clear-day)';
 
   return (
-    <section id="main-weather" className={`separation ${weatherClass}`}>
-      <MainWeather weather={weather} />
-      <div className="additional-info">
-        <ul>
-          <li>
-            <b>Viento:</b> {weather.wind?.speed || 'N/A'} m/s
-          </li>
-          <li>
-            <b>Presión:</b> {weather.main?.pressure || 'N/A'} hPa
-          </li>
-          <li>
-            <b>Humedad:</b> {weather.main?.humidity || 'N/A'} %
-          </li>
-          <li>
-            <b>Nubosidad:</b> {weather.clouds?.all || 'N/A'} %
-          </li>
-        </ul>
-      </div>
-    </section>
+    <>
+      {weather && (
+        <section
+          id="main-weather"
+          className="separation"
+          style={{
+            backgroundColor, // Aplica el color dinámico
+          }}
+        >
+          <MainWeather weather={weather} />
+          <div className="additional-info">
+            <ul>
+              <li>
+                <b>Viento:</b> {weather.wind.speed} m/s
+              </li>
+              <li>
+                <b>Presión:</b> {weather.main.pressure} hPa
+              </li>
+              <li>
+                <b>Humedad:</b> {weather.main.humidity} %
+              </li>
+              <li>
+                <b>Nubosidad:</b> {weather.clouds.all} %
+              </li>
+            </ul>
+          </div>
+        </section>
+      )}
+    </>
   );
 };
 

@@ -4,7 +4,7 @@ import './SearchBar.css';
 import { apiRequest } from '../../utils/apiRequest';
 import { useNavigate } from 'react-router-dom';
 
-const SearchBar = ({ getWeather }) => {
+const SearchBar = ({ getWeather, setMainWeather }) => {
   const [userInput, setUserInput] = useState('');
   const [error, setError] = useState(false);
   const navigate = useNavigate();
@@ -49,7 +49,10 @@ const SearchBar = ({ getWeather }) => {
     if (coords) {
       const weatherReport = await getWeather(coords);
 
-      // Limpiar la lista de ubicaciones previas (opcional)
+      // Actualizar mainWeather
+      setMainWeather(weatherReport);
+
+      // Guardar la ubicación en localStorage
       localStorage.setItem('savedLocations', JSON.stringify([weatherReport]));
 
       navigate(`/weather/${weatherReport.id}`);
@@ -58,11 +61,7 @@ const SearchBar = ({ getWeather }) => {
 
   return (
     <div className="search-container">
-      <form
-        id="search-form"
-        role="search"
-        onSubmit={handleSubmit}
-      >
+      <form id="search-form" role="search" onSubmit={handleSubmit}>
         <input
           id="q"
           aria-label="Buscar por ciudad"
@@ -82,3 +81,4 @@ const SearchBar = ({ getWeather }) => {
 };
 
 export default SearchBar;
+

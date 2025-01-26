@@ -21,9 +21,12 @@
 }
 
 #search-form button {
+  display: flex; /* Asegura que el contenido del botón sea un contenedor flexible */
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
   border: 2px solid var(--color-dark);
   border-left: none;
-  padding: var(--spacing-xs) var(--spacing-m);
+  padding: var(--spacing-xs); /* Ajusta el padding si es necesario */
   cursor: pointer;
   background-color: var(--color-primary);
   color: var(--color-light);
@@ -32,9 +35,9 @@
 
 #search-form button img {
   width: 24px;
+  height: 24px; /* Asegura que la imagen tenga dimensiones proporcionadas */
   transition: transform 0.2s;
 }
-
 #search-form button:hover {
   background-color: var(--color-hover);
 }

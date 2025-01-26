@@ -1,32 +1,33 @@
 .saved-location {
+  background-color: var(--color-accent-1);
   border-radius: var(--border-radius);
   padding: var(--spacing-s) var(--spacing-m);
   border: 1px dashed var(--color-light);
-  outline: 4px solid;
+  outline: 4px solid var(--color-accent-1);
   max-height: 140px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  margin: var(--spacing-s) 0;
+  margin: 0px 5px;
   min-width: 220px;
-  transition: background-color 0.3s ease;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  @media screen and (max-width: 750px) {
+    width: 250px;
+  }
 }
 
 .saved-location.clear {
-  background-color: #88b6fc; /* Azul claro para <= 50% nubes */
-  outline-color: #88b6fc;
+  background: linear-gradient(to bottom, #88b6fc, #f0f8ff); /* Azul claro */
+  color: #ffffff; /* Texto blanco */
 }
 
 .saved-location.cloudy {
-  background-color: var(--color-cloudy-day); /* Gris para > 50% nubes */
-  outline-color: var(--color-cloudy-day);
+  background: linear-gradient(to bottom, #b0b0b0, #d9d9d9); /* Gris claro */
+  color: #4d4d4d; /* Texto gris oscuro */
 }
 
 .saved-location .main-weather {
   padding: 0;
 }
-
 .saved-location .weather-icon > img {
   max-height: 80px;
 }
@@ -47,11 +48,4 @@
 
 .saved-location .current-location {
   margin-top: 0;
-}
-
-.no-locations {
-  font-style: italic;
-  color: gray;
-  text-align: center;
-  margin-top: var(--spacing-m);
 }

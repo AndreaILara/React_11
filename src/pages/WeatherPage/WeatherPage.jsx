@@ -7,54 +7,49 @@ import { apiRequest } from '../../utils/apiRequest';
 import Loader from '../../components/Loader/Loader';
 
 const WeatherPage = () => {
-  const [savedLocations, setSavedLocations] = useState([]);
-  const [currentWeather, setCurrentWeather] = useState(null); // Nuevo estado para la ubicación seleccionada
+  const [savedLocations, setSavedLocations] = useState(
+    JSON.parse(localStorage.getItem('savedLocations')) ?? []
+  );
 
   const getLocalWeather = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
+      window.navigator.geolocation.getCurrentPosition(
+        position => {
           const coords = {
             lat: position.coords.latitude,
             lon: position.coords.longitude,
           };
-          getWeather(coords).then((weatherReport) => {
-            if (weatherReport && weatherReport.id) {
-              setSavedLocations((prevLocations) => {
-                const updatedLocations = updateWithoutDuplicates(
-                  weatherReport,
-                  prevLocations.filter((location) => location && location.id)
-                ).map((location) =>
-                  location.id === weatherReport.id
-                    ? { ...location, local: true }
-                    : { ...location, local: false }
-                );
-                localStorage.setItem(
-                  'savedLocations',
-                  JSON.stringify(updatedLocations)
-                );
-                return updatedLocations;
-              });
-              setCurrentWeather(weatherReport); // Establecer como ubicación seleccionada
-            }
+          getWeather(coords).then(weatherReport => {
+            setSavedLocations(prevLocations => {
+              const updatedLocations = prevLocations.map(location =>
+                location.id === weatherReport.id
+                  ? { ...location, local: true }
+                  : { ...location, local: false }
+              );
+              localStorage.setItem(
+                'savedLocations',
+                JSON.stringify(updatedLocations)
+              );
+              return updatedLocations;
+            });
           });
         },
-        (error) => {
-          console.error('Error obteniendo la ubicación del usuario:', error);
+        error => {
+          console.error('Error getting user location:', error);
         }
       );
     } else {
-      alert('La geolocalización no es compatible con este navegador.');
+      alert('Geolocation is not supported by this browser.');
     }
   };
 
-  const getWeather = async (coords) => {
+  const getWeather = async coords => {
     try {
       const weatherReport = await apiRequest({ coords });
       if (weatherReport) {
         const updatedLocations = updateWithoutDuplicates(
           weatherReport,
-          savedLocations.filter((location) => location && location.id)
+          savedLocations
         );
         setSavedLocations(updatedLocations);
         localStorage.setItem(
@@ -64,45 +59,18 @@ const WeatherPage = () => {
         return weatherReport;
       }
     } catch (error) {
-      console.error('Error obteniendo el clima:', error);
+      console.error(error);
     }
   };
 
   useEffect(() => {
-    const storedLocations =
-      JSON.parse(localStorage.getItem('savedLocations')) ?? [];
-    const validLocations = storedLocations.filter(
-      (location) => location && location.id
-    );
-    setSavedLocations(validLocations);
-
-    if (navigator.geolocation) {
-      const confirmLocation = window.confirm(
-        '¿Permitir acceso a tu ubicación actual?'
-      );
-      if (confirmLocation) {
-        getLocalWeather();
-      }
-    }
+    getLocalWeather();
   }, []);
 
   return (
     <div id="weather">
-      <Aside
-        getWeather={getWeather}
-        listOfLocations={savedLocations.filter(
-          (location) => location && location.id
-        )}
-      />
-      {currentWeather ? (
-        <Weather list={[currentWeather]} /> // Mostrar la ubicación actual seleccionada
-      ) : savedLocations.length ? (
-        <Weather
-          list={savedLocations.filter((location) => location && location.id)}
-        />
-      ) : (
-        <Loader />
-      )}
+      <Aside getWeather={getWeather} listOfLocations={savedLocations} />
+      {savedLocations.length ? <Weather list={savedLocations} /> : <Loader />}
     </div>
   );
 };

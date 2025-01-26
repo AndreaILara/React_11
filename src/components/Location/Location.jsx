@@ -1,17 +1,14 @@
-import MainWeather from '../MainWeather/MainWeather';
 import './Location.css';
+import MainWeather from '../MainWeather/MainWeather';
 
 const Location = ({ locationWeather }) => {
-  if (!locationWeather || !locationWeather.clouds) {
-    return null;
-  }
-
-  const backgroundColor = locationWeather.clouds.all > 50 ? 'cloudy' : 'clear';
+  // Determinar clase CSS según la nubosidad
+  const weatherClass = locationWeather.clouds.all > 50 ? 'cloudy' : 'clear';
 
   return (
-    <div className={`saved-location ${backgroundColor}`}>
+    <li className={`saved-location ${weatherClass}`}>
       <MainWeather weather={locationWeather} />
-    </div>
+    </li>
   );
 };
 

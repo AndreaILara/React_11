@@ -20,7 +20,8 @@
   --color-dark-bg: #222222;
   --color-dark-text: #eeeeee;
   --color-cloudy-day: #dddddd;
-  --color-cloudy-night: #3a3a3a;
+  --color-clear-day: #88b6fcaf;
+  --color-cloudy-night: #3a3a3aa9;
 
   /* Spacings */
   --spacing-xl: 40px;
@@ -97,7 +98,6 @@ button:hover {
 .main-title {
   font-size: var(--font-size-xl);
   font-weight: 600;
-  color: var(--color-primary);
 }
 
 .container {
