@@ -81,4 +81,3 @@ const SearchBar = ({ getWeather, setMainWeather }) => {
 };
 
 export default SearchBar;
-
